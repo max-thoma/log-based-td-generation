@@ -1,6 +1,240 @@
 # Introduction
 
-This repository holds the prototypical implementation of the proposed methodology for the paper “Utilizing Large Language Models for Log-Based Automated Thing Description Generation” submitted to the SEMANTICS 2025.
+This repository holds the prototypical implementation of the proposed methodology for the paper “Utilizing Large Language Models for Log-Based Automated Thing Description Generation” submitted to the SEMANTICS 2025. Moreover, we also included a full usage example. The original dataset of the paper can be found [here](https://doi.org/10.5281/zenodo.15526223).
+
+## Paper TLDR
+
+Web of Things (WoT) [Thing Descriptions](https://www.w3.org/TR/wot-thing-description11/) (TDs) can increase the semantic interoperability in IoT systems. However, for many new and existing devices no TD has been created yet. This hinders the adoption of the WoT. Therefore, we propose an LLM based methodology that generates TDs from MQTT message logs. We specifically target brownfield systems that have already been set up and want to adopt the WoT ecosystem. MQTT message log have the advantage that they do not require special tooling to create. Simply subscribing to the wildcard topic: `*` and writing the messages to a file is sufficient. In the following we present the methodology with a concrete example from one of our experiments using Google's `gemini-flash-2.0` LLM. The full trace of the experiment can be found in `data/llm_results/gemini.json`. For the sources of the device please refer to the [Custom Dataset](#custom-dataset) section.
+
+# Example from Message Logs to TD
+
+Assume that we have logged the following MQTT messages from an *RGB Lightbulb* by subscribing to `application/bulb/*`:
+
+```
+topic: application/bulb/status; payload: On; retain: true
+topic: application/bulb/status; payload: Off; retain: true
+topic: application/bulb/status; payload: Failed; retain: true
+topic: application/bulb/set; payload: {'r': 141, 'g': 48, 'b': 194}; retain: false
+topic: application/bulb/set; payload: {'r': 194, 'g': 3, 'b': 21}; retain: false
+topic: application/bulb/set; payload: {'r': 72, 'g': 160, 'b': 103}; retain: false
+topic: application/bulb/set; payload: {'r': 44, 'g': 48, 'b': 63}; retain: false
+topic: application/bulb/set; payload: {'r': 15, 'g': 55, 'b': 86}; retain: false
+topic: application/bulb/power; payload: true; retain: false
+topic: application/bulb/power; payload: false; retain: false
+topic: application/bulb/power; payload: true; retain: false
+topic: application/bulb/power; payload: false; retain: false
+```
+
+We observe that this message log paints a clear picture of the capabilities of the RGB Lightbulb: it can report its status, allows for setting the color, and can be remotely turned on and off. In a WoT TD, these features are called _affordances_ and are categorized into: _actions_, _events_, and _properties_. In the message log, there are three MQTT topics that correspond to an _affordance_ of the device. For each topic, we instruct an LLM to determine what kind of WoT TD _affordance_ would best describe it:
+
+```
+Given is the following MQTT message log of an IoT device:
+
+topic: application/bulb/status; payload: On; retain: true
+topic: application/bulb/status; payload: Off; retain: true
+topic: application/bulb/status; payload: Failed; retain: true
+topic: application/bulb/set; payload: {'r': 141, 'g': 48, 'b': 194}; retain: false
+topic: application/bulb/set; payload: {'r': 194, 'g': 3, 'b': 21}; retain: false
+topic: application/bulb/set; payload: {'r': 72, 'g': 160, 'b': 103}; retain: false
+topic: application/bulb/set; payload: {'r': 44, 'g': 48, 'b': 63}; retain: false
+topic: application/bulb/set; payload: {'r': 15, 'g': 55, 'b': 86}; retain: false
+topic: application/bulb/power; payload: true; retain: false
+topic: application/bulb/power; payload: false; retain: false
+topic: application/bulb/power; payload: true; retain: false
+topic: application/bulb/power; payload: false; retain: false
+
+For this the following part of the message log:
+
+topic: application/bulb/status; payload: On; retain: true
+topic: application/bulb/status; payload: Off; retain: true
+topic: application/bulb/status; payload: Failed; retain: true
+
+
+Determine what kind of affordance this is!
+```
+
+To ensure that the generated _affordance_ is compliant with the WoT TD specification, we modeled part of the TD specification as a Python class. With the help of the [Instructor](https://python.useinstructor.com) library, we provide this as a shema to the LLM and check that the response of the LLM is conforming to the schema.
+
+```python
+class ClassificationAffordance(BaseModel):
+    title: str = Field(description="A short title for the affordance")
+    description: str = Field(description="A description of the affordance")
+    name: str = Field(
+        description="Name of the affordance in camel case e.g. 'myAffordanceName'"
+    )
+    # Using the official definitions from the WoT TD specification (https://www.w3.org/TR/wot-thing-description11/)
+    affordance_type: AffordanceType = Field(
+        description="The type of the affordance: actions: An Interaction Affordance that allows to invoke a function of the Thing, which manipulates state (e.g., toggling a lamp on or off) or triggers a process on the Thing (e.g., dim a lamp over time). events: An Interaction Affordance that describes an event source, which asynchronously pushes event data to Consumers (e.g., overheating alerts). property: An Interaction Affordance that exposes state of the Thing. This state can then be retrieved (read) and/or updated (write). Things can also choose to make Properties observable by pushing the new state after a change."
+    )
+    type: AttributeType = Field(
+        alias="@type",
+        description="The data type of the affordance. boolean: a boolean data type, it is represented by 'true' and 'false'. number: The most general numeric data type, it is used to represent floating point numbers, but not integers. integer: the data type used to represent integer numbers. object: the data type is used to describe complex, dictionary/JSON like objects. string: the data type is used to describe strings. null: this data type is used to describe null data, i.e., no data, it is indicated by 'null'",
+    )
+    is_enum: bool = Field(
+        description="Whether the affordance is composed of a list of ENUM string values. This is only applicable if the affordance is of type string",
+    )
+```
+
+After all conformance checks have passed, the LLM returns an _affordance_ that describes what was observed in the MQTT message log:
+
+```json
+"properties": {
+   "bulbStatus":{
+      "title":"Bulb Status",
+      "description":"The current status of the bulb (On, Off, Failed)",
+      "type":"string",
+      "enum":[
+         "On",
+         "Off",
+         "Failed"
+      ],
+      "properties":{},
+      "forms":[
+         {
+            "href":"mqtt://broker.emqx.io:1883",
+            "mqv:topic":"application/bulb/status",
+            "mqv:retain":true
+         }
+      ]
+   }
+}
+```
+
+After instructing the LLM for all _affordances_ that are found in the message log, we bundle them, and prompt the LLM to create the "toplevel" description of the device.
+
+```
+Give is the following partial Thing Description (TD)
+{
+    "properties": {...},
+    "events": {...},
+    "actions": {...}
+}
+
+Determine for what kind of device this Thing Description models!
+```
+
+As before, the LLM also receives a schema that it has to follow for this step:
+
+```python
+class ClassificationTD(BaseModel):
+    type: str = Field(
+        alias="@type",
+        description="Is the type of the Thing that the Thing Description models",
+    )
+    title: str = Field(description="A short title that describes the Thing")
+    id: str = Field(description="A URN")
+    description: str = Field(description="A short description of the Thing")
+```
+
+Then, everything is assembled to a final TD (some null values were removed for brevity):
+
+```json
+{
+   "@context": [
+      "https://www.w3.org/2022/wot/td/v1.1"
+   ],
+   "@type": "SmartBulb",
+   "title": "Smart Bulb",
+   "id": "urn:example:smartbulb",
+   "securityDefinitions": {
+      "nosec_sc": {
+         "scheme": "nosec"
+      }
+   },
+   "security": [
+      "nosec_sc"
+   ],
+   "description": "A smart bulb that can be controlled remotely.",
+   "properties": {
+      "bulbStatus": {
+         "title": "Bulb Status",
+         "description": "The current status of the bulb (On, Off, Failed)",
+         "type": "string",
+         "enum": [
+            "On",
+            "Off",
+            "Failed"
+         ],
+         "properties": {},
+         "forms": [
+            {
+               "href": "mqtt://broker.emqx.io:1883",
+               "contentType": null,
+               "mqv:topic": "application/bulb/status",
+               "mqv:retain": true
+            }
+         ]
+      },
+      "powerStatus": {
+         "title": "Power Status",
+         "description": "Control the power state of the bulb.",
+         "type": "boolean",
+         "enum": null,
+         "properties": {},
+         "forms": [
+            {
+               "href": "mqtt://broker.emqx.io:1883",
+               "contentType": null,
+               "mqv:topic": "application/bulb/power",
+               "mqv:retain": false
+            }
+         ]
+      }
+   },
+   "events": {},
+   "actions": {
+      "setColor": {
+         "title": "Set Color",
+         "description": "Sets the color of the bulb using RGB values.",
+         "input": {
+            "title": "",
+            "description": "",
+            "type": "object",
+            "enum": null,
+            "properties": {
+               "r": {
+                  "title": "",
+                  "description": "",
+                  "type": "integer",
+                  "enum": null,
+                  "properties": {}
+               },
+               "g": {
+                  "title": "",
+                  "description": "",
+                  "type": "integer",
+                  "enum": null,
+                  "properties": {}
+               },
+               "b": {
+                  "title": "",
+                  "description": "",
+                  "type": "integer",
+                  "enum": null,
+                  "properties": {}
+               }
+            }
+         },
+         "output": {
+            "title": "",
+            "description": "",
+            "type": "null",
+            "enum": null,
+            "properties": {}
+         },
+         "forms": [
+            {
+               "href": "mqtt://broker.emqx.io:1883",
+               "contentType": null,
+               "mqv:topic": "application/bulb/set",
+               "mqv:retain": false
+            }
+         ]
+      }
+   }
+}
+```
+The LLM chose to model the `powerStatus` not as an _action_, but as a _property_. This highlights that in asynchronous protocols such as MQTT the lines between the affordance types _action_, _event_ and _property_ a more blurred.
 
 # Basic Usage
 
@@ -11,10 +245,18 @@ cd src/
 poetry install
 ```
 
-The main implementation can be found in `classification.py`. To run call:
+The main implementation of our methodology can be found in `classification.py`. To run call:
 
 ```bash
 poetry run python classification.py -m MODEL_NAME -t TEMPERATURE -i ITERATIONS -r RETRIES [-b BASE_URL] [--think]
+```
+
+Do not forget to save your API keys as environment variables, or in a `.env` file in the `src/td_generator` directory.
+
+```
+OPENAI_API_KEY=""
+LOCAL_AI_API_KEY=""
+GOOGLE_API_KEY=""
 ```
 
 ## Arguments

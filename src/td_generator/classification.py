@@ -269,7 +269,7 @@ def run_experiment(
 
     if base_url is not None:
         client = instructor.from_openai(
-            OpenAI(api_key="asdf", base_url=base_url),
+            OpenAI(api_key=os.environ.get("LOCAL_AI_API_KEY"), base_url=base_url),
             mode=instructor.Mode.JSON,
         )
     else:
