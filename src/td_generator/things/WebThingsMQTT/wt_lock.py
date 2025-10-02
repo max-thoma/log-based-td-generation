@@ -1,4 +1,5 @@
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def td():
     return ThingDescription(
@@ -28,11 +29,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-25/properties/locked"},
-                        {
-                            "mqv:topic": "things/id-25/properties/locked",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 }
             },
@@ -66,15 +62,6 @@ def td():
                 {
                     "mqv:topic": "things/id-25/properties",
                     "op": "readallproperties",
-                },
-                {
-                    "mqv:topic": "things/id-25/properties",
-                    "op": ["observeallproperties", "unobserveallproperties"],
-                    "subprotocol": "sse",
-                },
-                {
-                    "mqv:topic": "things/id-25/actions",
-                    "op": "queryallactions",
                 },
             ],
             "layoutIndex": 23,

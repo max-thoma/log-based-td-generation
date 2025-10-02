@@ -1,4 +1,5 @@
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def td():
     return ThingDescription(
@@ -37,22 +38,7 @@ def td():
                             "contentType": "application/json",
                             "op": ["readproperty"],
                             "htv:methodName": "GET",
-                        },
-                        {
-                            "mqv:topic": "counter/properties/count/observable",
-                            "contentType": "application/json",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "longpoll",
-                        },
-                        {
-                            "mqv:topic": "coap://plugfest.thingweb.io:5683/counter/properties/count",
-                            "contentType": "application/json",
-                            "op": [
-                                "readproperty",
-                                "observeproperty",
-                                "unobserveproperty",
-                            ],
-                        },
+                        }
                     ],
                 },
                 "countAsImage": {
@@ -64,11 +50,6 @@ def td():
                             "contentType": "image/svg+xml",
                             "op": ["readproperty"],
                             "htv:methodName": "GET",
-                        },
-                        {
-                            "mqv:topic": "coap://plugfest.thingweb.io:5683/counter/properties/countAsImage",
-                            "contentType": "image/svg+xml",
-                            "op": ["readproperty"],
                         },
                     ],
                     "observable": False,
@@ -102,21 +83,6 @@ def td():
                                 "2025-04-29T14:24:21+00:00",
                             ],
                         },
-                        {
-                            "mqv:topic": "counter/properties/lastChange/observable",
-                            "contentType": "application/json",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "longpoll",
-                        },
-                        {
-                            "mqv:topic": "coap://plugfest.thingweb.io:5683/counter/properties/lastChange",
-                            "contentType": "application/json",
-                            "op": [
-                                "readproperty",
-                                "observeproperty",
-                                "unobserveproperty",
-                            ],
-                        },
                     ],
                 },
             },
@@ -138,12 +104,7 @@ def td():
                             "contentType": "application/json",
                             "op": ["invokeaction"],
                             "htv:methodName": "POST",
-                        },
-                        {
-                            "mqv:topic": "coap://plugfest.thingweb.io:5683/counter/actions/increment",
-                            "contentType": "application/json",
-                            "op": ["invokeaction"],
-                        },
+                        }
                     ],
                     "idempotent": False,
                     "safe": False,
@@ -165,12 +126,7 @@ def td():
                             "contentType": "application/json",
                             "op": ["invokeaction"],
                             "htv:methodName": "POST",
-                        },
-                        {
-                            "mqv:topic": "coap://plugfest.thingweb.io:5683/counter/actions/decrement",
-                            "contentType": "application/json",
-                            "op": ["invokeaction"],
-                        },
+                        }
                     ],
                     "idempotent": False,
                     "safe": False,
@@ -189,11 +145,6 @@ def td():
                             "contentType": "application/json",
                             "op": ["invokeaction"],
                             "htv:methodName": "POST",
-                        },
-                        {
-                            "mqv:topic": "coap://plugfest.thingweb.io:5683/counter/actions/reset",
-                            "contentType": "application/json",
-                            "op": ["invokeaction"],
                         },
                     ],
                     "idempotent": False,
@@ -214,16 +165,6 @@ def td():
                             "mqv:topic": "counter/events/change",
                             "contentType": "application/json",
                             "subprotocol": "longpoll",
-                            "op": ["subscribeevent", "unsubscribeevent"],
-                        },
-                        {
-                            "mqv:topic": "ws://plugfest.thingweb.io:8083/counter/events/change",
-                            "contentType": "application/json",
-                            "op": ["subscribeevent"],
-                        },
-                        {
-                            "mqv:topic": "coap://plugfest.thingweb.io:5683/counter/events/change",
-                            "contentType": "application/json",
                             "op": ["subscribeevent", "unsubscribeevent"],
                         },
                     ],

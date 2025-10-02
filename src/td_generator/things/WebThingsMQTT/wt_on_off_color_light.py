@@ -1,4 +1,5 @@
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def _mock_color(type=None, min=None, max=None, enum=None, name=None):
     return [
@@ -36,11 +37,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-0/properties/on"},
-                        {
-                            "mqv:topic": "things/id-0/properties/on",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "color": {
@@ -56,11 +52,6 @@ def td():
                         {
                             "mqv:topic": "things/id-0/properties/color",
                             "mock": _mock_color,
-                        },
-                        {
-                            "mqv:topic": "things/id-0/properties/color",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
                         },
                     ],
                 },
@@ -82,11 +73,6 @@ def td():
                 {
                     "mqv:topic": "things/id-0/properties",
                     "op": ["readallproperties", "writemultipleproperties"],
-                },
-                {
-                    "mqv:topic": "things/id-0/properties",
-                    "op": ["observeallproperties", "unobserveallproperties"],
-                    "subprotocol": "sse",
                 },
             ],
             "layoutIndex": 1,

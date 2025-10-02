@@ -1,11 +1,10 @@
 [tool.poetry]
-name = "edgellm"
+name = "td_generator"
 version = "0.1.0"
 description = "Generating WoT TD from MQTT message logs"
 authors = ["Max Thoma"]
 readme = "README.md"
 license = "BSD-3-Clause"
-package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"

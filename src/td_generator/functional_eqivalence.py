@@ -2,8 +2,8 @@ import pandas as pd
 from pandas import DataFrame
 from pydantic_core import from_json
 
-from classification_definitions import ExperimentResultList
-from td import (
+from td_generator.classification_definitions import ExperimentResultList
+from td_generator.td import (
     compare_affordance,
     AffordanceType,
     AttributeType,

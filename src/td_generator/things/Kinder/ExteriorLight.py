@@ -1,6 +1,7 @@
 from matplotlib.pyplot import title
 
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def td():
     return ThingDescription(

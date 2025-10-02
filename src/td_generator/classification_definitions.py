@@ -3,7 +3,7 @@ from typing import List
 
 from pydantic import BaseModel, Field
 
-from td import (
+from td_generator.td import (
     AffordanceType,
     AttributeType,
     Forms,

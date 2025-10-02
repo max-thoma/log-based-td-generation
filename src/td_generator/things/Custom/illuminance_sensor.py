@@ -1,12 +1,14 @@
 import datetime
 
-from td import ThingDescription, MESSAGE_NUM
+import td_generator
+from td_generator.td import ThingDescription
+
 
 def _mock(type=None, min=None, max=None, enum=None, name=None):
     msg = []
     now = datetime.datetime.now()
     step = datetime.timedelta(minutes=5)
-    for i in range(0, MESSAGE_NUM):
+    for i in range(0, td_generator.td.MESSAGE_NUM):
         msg.append((now + i * step).isoformat())
     return msg
 

@@ -1,4 +1,5 @@
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def td():
     return ThingDescription(
@@ -33,11 +34,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-2/properties/color"},
-                        {
-                            "mqv:topic": "things/id-2/properties/color",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "colorTemperature": {
@@ -53,11 +49,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-2/properties/colorTemperature"},
-                        {
-                            "mqv:topic": "things/id-2/properties/colorTemperature",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "colorMode": {
@@ -72,11 +63,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-2/properties/colorMode"},
-                        {
-                            "mqv:topic": "things/id-2/properties/colorMode",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "level": {
@@ -92,11 +78,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-2/properties/level"},
-                        {
-                            "mqv:topic": "things/id-2/properties/level",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "on": {
@@ -109,11 +90,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-2/properties/on"},
-                        {
-                            "mqv:topic": "things/id-2/properties/on",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
             },
@@ -134,11 +110,6 @@ def td():
                 {
                     "mqv:topic": "things/id-2/properties",
                     "op": ["readallproperties", "writemultipleproperties"],
-                },
-                {
-                    "mqv:topic": "things/id-2/properties",
-                    "op": ["observeallproperties", "unobserveallproperties"],
-                    "subprotocol": "sse",
                 },
             ],
             "layoutIndex": 3,

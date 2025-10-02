@@ -10,7 +10,7 @@ import google.generativeai as genai
 import instructor
 from openai import OpenAI
 
-import generate
+import td_generator.generate as generate
 from classification_definitions import (
     ClassificationAffordance,
     ThingDescriptionSkeleton,
@@ -19,9 +19,9 @@ from classification_definitions import (
     ExperimentResult,
     ExperimentResultList,
 )
-from message_log import MessageLogList, DeviceMessageLog
-from mock import generate_device_message_log
-from td import (
+from td_generator.message_log import MessageLogList, DeviceMessageLog
+from td_generator.mock import generate_device_message_log
+from td_generator.td import (
     AttributeType,
     ThingDescription,
 )

@@ -1,4 +1,5 @@
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def td():
     return ThingDescription(
@@ -264,11 +265,6 @@ def td():
                                 },
                                 {"region": "MI, Detroit", "alert": "Heavy winds"},
                             ],
-                        },
-                        {
-                            "op": ["subscribeevent"],
-                            "contentType": "application/json;charset=utf-8",
-                            "mqv:topic": "ws://192.168.30.121:8888/weatheralert",
                         },
                     ],
                 }

@@ -5,7 +5,7 @@ from numpy import dot
 from openai import OpenAI
 from pydantic_core import from_json
 
-from classification_definitions import ExperimentResultList
+from td_generator.classification_definitions import ExperimentResultList
 
 
 # client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -48,10 +48,10 @@ def analyze(file_name):
                     result.base_td.description,
                     llm_td.description,
                     "x",
-                    #get_embedding_similarity(
+                    # get_embedding_similarity(
                     #    f"{result.base_td.type}, {result.base_td.title}: {result.base_td.description}",
                     #    f"{llm_td.type}, {llm_td.title}: {llm_td.description}",
-                    #),
+                    # ),
                 ]
             )
 
@@ -68,7 +68,7 @@ def analyze(file_name):
                         base_affordance.model_dump_json(indent=2),
                         affordance.model_dump_json(indent=2),
                         "x",
-                        #get_embedding_similarity(base_description, llm_description),
+                        # get_embedding_similarity(base_description, llm_description),
                     ]
                 )
             # We only evaluate the first set of TDs

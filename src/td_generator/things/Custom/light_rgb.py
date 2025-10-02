@@ -1,6 +1,6 @@
 import random
 
-from td import ThingDescription, MESSAGE_NUM
+from td_generator.td import ThingDescription, MESSAGE_NUM
 
 
 def _mock(type=None, min=None, max=None, enum=None, name=None):

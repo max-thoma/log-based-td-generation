@@ -1,4 +1,5 @@
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def td():
     return ThingDescription(
@@ -30,11 +31,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-24/properties/temperature"},
-                        {
-                            "mqv:topic": "things/id-24/properties/temperature",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "heatingTargetTemperature": {
@@ -52,11 +48,6 @@ def td():
                     "forms": [
                         {
                             "mqv:topic": "things/id-24/properties/heatingTargetTemperature"
-                        },
-                        {
-                            "mqv:topic": "things/id-24/properties/heatingTargetTemperature",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
                         },
                     ],
                 },
@@ -76,11 +67,6 @@ def td():
                         {
                             "mqv:topic": "things/id-24/properties/coolingTargetTemperature"
                         },
-                        {
-                            "mqv:topic": "things/id-24/properties/coolingTargetTemperature",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "heatingCooling": {
@@ -95,11 +81,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-24/properties/heatingCooling"},
-                        {
-                            "mqv:topic": "things/id-24/properties/heatingCooling",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "thermostatMode": {
@@ -113,11 +94,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-24/properties/thermostatMode"},
-                        {
-                            "mqv:topic": "things/id-24/properties/thermostatMode",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
             },
@@ -138,11 +114,6 @@ def td():
                 {
                     "mqv:topic": "things/id-24/properties",
                     "op": ["readallproperties", "writemultipleproperties"],
-                },
-                {
-                    "mqv:topic": "things/id-24/properties",
-                    "op": ["observeallproperties", "unobserveallproperties"],
-                    "subprotocol": "sse",
                 },
             ],
             "layoutIndex": 22,

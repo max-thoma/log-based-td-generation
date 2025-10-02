@@ -1,13 +1,14 @@
 import os
 
-from generate import things_list
-from message_log import (
+from td_generator.generate import things_list
+from td_generator.message_log import (
     MessageLog,
     DeviceMessageLog,
     MessageLogList,
     DeviceMessageLogList,
 )
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def log_message(topic, payload, retain, subscribed, file):
     l = MessageLog(

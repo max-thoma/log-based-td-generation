@@ -1,5 +1,4 @@
-from td import ThingDescription
-from td import MESSAGE_NUM
+from td_generator.td import ThingDescription
 
 
 def _mock_color(type=None, min=None, max=None, enum=None, name=None):
@@ -42,11 +41,6 @@ def td():
                             "mqv:topic": "things/id-26/properties/color",
                             "mock": _mock_color,
                         },
-                        {
-                            "mqv:topic": "things/id-26/properties/color",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 }
             },
@@ -67,11 +61,6 @@ def td():
                 {
                     "mqv:topic": "things/id-26/properties",
                     "op": "readallproperties",
-                },
-                {
-                    "mqv:topic": "things/id-26/properties",
-                    "op": ["observeallproperties", "unobserveallproperties"],
-                    "subprotocol": "sse",
                 },
             ],
             "layoutIndex": 24,

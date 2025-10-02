@@ -1,4 +1,5 @@
-from td import ThingDescription
+from td_generator.td import ThingDescription
+
 
 def td():
     return ThingDescription(
@@ -28,11 +29,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-22/properties/instantaneousPower"},
-                        {
-                            "mqv:topic": "things/id-22/properties/instantaneousPower",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "instantaneousPowerFactor": {
@@ -50,11 +46,6 @@ def td():
                         {
                             "mqv:topic": "things/id-22/properties/instantaneousPowerFactor"
                         },
-                        {
-                            "mqv:topic": "things/id-22/properties/instantaneousPowerFactor",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "voltage": {
@@ -69,11 +60,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-22/properties/voltage"},
-                        {
-                            "mqv:topic": "things/id-22/properties/voltage",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "current": {
@@ -88,11 +74,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-22/properties/current"},
-                        {
-                            "mqv:topic": "things/id-22/properties/current",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
                 "frequency": {
@@ -109,11 +90,6 @@ def td():
                     "links": [],
                     "forms": [
                         {"mqv:topic": "things/id-22/properties/frequency"},
-                        {
-                            "mqv:topic": "things/id-22/properties/frequency",
-                            "op": ["observeproperty", "unobserveproperty"],
-                            "subprotocol": "sse",
-                        },
                     ],
                 },
             },
@@ -134,11 +110,6 @@ def td():
                 {
                     "mqv:topic": "things/id-22/properties",
                     "op": "readallproperties",
-                },
-                {
-                    "mqv:topic": "things/id-22/properties",
-                    "op": ["observeallproperties", "unobserveallproperties"],
-                    "subprotocol": "sse",
                 },
             ],
             "layoutIndex": 20,
